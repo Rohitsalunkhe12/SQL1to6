@@ -1,0 +1,412 @@
+
+Setting environment for using XAMPP for Windows.
+Aniket@DESKTOP-56FQSH7 c:\xampp
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database system;
+Query OK, 1 row affected (0.083 sec)
+
+MariaDB [(none)]> use system
+Database changed
+MariaDB [system]> create table customers(
+    -> cust_id int primary key,
+    -> name varchar(20) ,
+    -> email varchar(230) ,
+    -> adress varchar(255)
+    -> );
+Query OK, 0 rows affected (0.201 sec)
+
+MariaDB [system]> desc customers;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| cust_id | int(11)      | NO   | PRI | NULL    |       |
+| name    | varchar(20)  | YES  |     | NULL    |       |
+| email   | varchar(230) | YES  |     | NULL    |       |
+| adress  | varchar(255) | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+4 rows in set (0.048 sec)
+
+MariaDB [system]> create table categories(
+    -> category_id int primary key,
+    -> category_name varchar(255),
+    -> create table categories(
+    -> category_id int primary key,
+    -> category_name varchar(255)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'create table categories(
+category_id int primary key,
+category_name varchar(2...' at line 4
+MariaDB [system]> create table categories(
+    -> category_id int primary key,
+    -> category_name varchar(255)
+    -> );
+Query OK, 0 rows affected (0.252 sec)
+
+MariaDB [system]> desc categories;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| category_id   | int(11)      | NO   | PRI | NULL    |       |
+| category_name | varchar(255) | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+2 rows in set (0.039 sec)
+
+MariaDB [system]> create table product(
+    -> product_id int primary key,
+    -> product_name varchar(255),
+    -> price float,
+    -> stock_quantity int,
+    -> category_id int,
+    -> foreign key(category_id) references categories(category_id)
+    -> );
+Query OK, 0 rows affected (0.625 sec)
+
+MariaDB [system]> desc product;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| product_id     | int(11)      | NO   | PRI | NULL    |       |
+| product_name   | varchar(255) | YES  |     | NULL    |       |
+| price          | float        | YES  |     | NULL    |       |
+| stock_quantity | int(11)      | YES  |     | NULL    |       |
+| category_id    | int(11)      | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+5 rows in set (0.041 sec)
+
+MariaDB [system]> create table orders (
+    -> order_id int primary key,
+    -> customer_id int,
+    -> order_date date,
+    -> total_amount float,
+    -> foreign key(customer_id) references customers(customer_id)
+    -> );
+ERROR 1005 (HY000): Can't create table `system`.`orders` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [system]> create table orders (
+    -> order_id int primary key,
+    -> cust_id int,
+    -> order_date date,
+    -> total_amount float,
+    -> foreign key(cust_id) references customers(cust_id)
+    -> );
+Query OK, 0 rows affected (0.502 sec)
+
+MariaDB [system]> create table orderdetails (
+    -> order_detail_id int primary key,
+    -> order_id int,
+    -> product_id int,
+    -> qauntity int,
+    -> foreign key(order_id) references orders(order_id),
+    -> foreign key(product_id) references products(product_id)
+    -> );
+ERROR 1005 (HY000): Can't create table `system`.`orderdetails` (errno: 150 "Foreign key constraint is incorrectly formed")
+MariaDB [system]> create table orderdetails (
+    -> order_detail_id int primary key,
+    -> order_id int,
+    -> product_id int,
+    -> qauntity int,
+    -> foreign key(order_id) references orders(order_id),
+    -> foreign key(product_id) references product(product_id)
+    -> );
+Query OK, 0 rows affected (0.433 sec)
+
+MariaDB [system]> desc orderdetails;
++-----------------+---------+------+-----+---------+-------+
+| Field           | Type    | Null | Key | Default | Extra |
++-----------------+---------+------+-----+---------+-------+
+| order_detail_id | int(11) | NO   | PRI | NULL    |       |
+| order_id        | int(11) | YES  | MUL | NULL    |       |
+| product_id      | int(11) | YES  | MUL | NULL    |       |
+| qauntity        | int(11) | YES  |     | NULL    |       |
++-----------------+---------+------+-----+---------+-------+
+4 rows in set (0.101 sec)
+
+MariaDB [system]> create table reviews (
+    -> review_id int primary key,
+    -> cust_id int,
+    -> product_id int,
+    -> reveiw_text varchar(300),
+    -> foreign key(cust_id) references customers(cust_id),
+    -> foreign key(product_id) references product(product_id));
+Query OK, 0 rows affected (0.471 sec)
+
+MariaDB [system]> desc reviews;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| review_id   | int(11)      | NO   | PRI | NULL    |       |
+| cust_id     | int(11)      | YES  | MUL | NULL    |       |
+| product_id  | int(11)      | YES  | MUL | NULL    |       |
+| reveiw_text | varchar(300) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+4 rows in set (0.047 sec)
+
+MariaDB [system]> insert into customers values(1,'rohit','rohit@gmail.com','sector10 nerul navi mumbai');
+Query OK, 1 row affected (0.363 sec)
+
+MariaDB [system]> insert into customers values(2,'sunny','sunny1@gmail.com','sector1 nerul navi mumbai');
+Query OK, 1 row affected (0.093 sec)
+
+MariaDB [system]> insert into customers values(3,'om','om91@gmail.com','sector1 vashi navi mumbai');
+Query OK, 1 row affected (0.144 sec)
+
+MariaDB [system]> insert into customers values(4,'jay','jay91@gmail.com','sector1 turbhe navi mumbai');
+Query OK, 1 row affected (0.093 sec)
+
+MariaDB [system]> insert into customers values(5,'shubham','shubham91@gmail.com','sector10 turbhe navi mumbai'),(6,'ashu','ashu123@gmail.com','kalwa mumbai');
+Query OK, 2 rows affected (0.095 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> insert into customers values(7,'shub','shub91@gmail.com','sector10 ghansoli navi mumbai'),(8,'ashutosh','ashutosh123@gmail.com','kalwa sector10 mumbai');
+Query OK, 2 rows affected (0.100 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> select * from customers;
++---------+----------+-----------------------+-------------------------------+
+| cust_id | name     | email                 | adress                        |
++---------+----------+-----------------------+-------------------------------+
+|       1 | rohit    | rohit@gmail.com       | sector10 nerul navi mumbai    |
+|       2 | sunny    | sunny1@gmail.com      | sector1 nerul navi mumbai     |
+|       3 | om       | om91@gmail.com        | sector1 vashi navi mumbai     |
+|       4 | jay      | jay91@gmail.com       | sector1 turbhe navi mumbai    |
+|       5 | shubham  | shubham91@gmail.com   | sector10 turbhe navi mumbai   |
+|       6 | ashu     | ashu123@gmail.com     | kalwa mumbai                  |
+|       7 | shub     | shub91@gmail.com      | sector10 ghansoli navi mumbai |
+|       8 | ashutosh | ashutosh123@gmail.com | kalwa sector10 mumbai         |
++---------+----------+-----------------------+-------------------------------+
+8 rows in set (0.001 sec)
+
+MariaDB [system]> insert into categories values
+    -> (1,'casual');
+Query OK, 1 row affected (0.099 sec)
+
+MariaDB [system]> insert into categories values (2,'formal'),(3,'wedding'),(4'tracksuit'),
+    -> (5,'kids'),
+    -> (6,'toys'),(7,'grocery');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''tracksuit'),
+(5,'kids'),
+(6,'toys'),(7,'grocery')' at line 1
+MariaDB [system]> insert into categories values (2,'formal'),(3,'wedding'),(4'tracksuit');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''tracksuit')' at line 1
+MariaDB [system]> insert into categories values (2,'formal'),(3,'wedding'),(4,'tracksuit');
+Query OK, 3 rows affected (0.130 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> insert into categories values (5,'kids'),
+    -> (6,'toys'),(7,'grocery');
+Query OK, 3 rows affected (0.094 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> select * from categories;
++-------------+---------------+
+| category_id | category_name |
++-------------+---------------+
+|           1 | casual        |
+|           2 | formal        |
+|           3 | wedding       |
+|           4 | tracksuit     |
+|           5 | kids          |
+|           6 | toys          |
+|           7 | grocery       |
++-------------+---------------+
+7 rows in set (0.001 sec)
+
+MariaDB [system]> insert into product values (1,'shoes',1289,165,2);
+Query OK, 1 row affected (0.093 sec)
+
+MariaDB [system]> insert into product values (2,'tshirt',1989,165,5),(3,'jeance',2755,18,3),(4,'track',399,1);
+ERROR 1136 (21S01): Column count doesn't match value count at row 3
+MariaDB [system]> insert into product values (2,'tshirt',1989,165,5),(3,'jeance',2755,18,3),(4,'track',999,31,1);
+Query OK, 3 rows affected (0.097 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> insert into product values (5,'cargo',1949,65,7),(6,'shirt',2855,98,4),(7,'sunglass',599,31,7);
+Query OK, 3 rows affected (0.111 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> select * from product;
++------------+--------------+-------+----------------+-------------+
+| product_id | product_name | price | stock_quantity | category_id |
++------------+--------------+-------+----------------+-------------+
+|          1 | shoes        |  1289 |            165 |           2 |
+|          2 | tshirt       |  1989 |            165 |           5 |
+|          3 | jeance       |  2755 |             18 |           3 |
+|          4 | track        |   999 |             31 |           1 |
+|          5 | cargo        |  1949 |             65 |           7 |
+|          6 | shirt        |  2855 |             98 |           4 |
+|          7 | sunglass     |   599 |             31 |           7 |
++------------+--------------+-------+----------------+-------------+
+7 rows in set (0.001 sec)
+
+MariaDB [system]> insert into orders values (1,3,'2023-12-24',15667);
+Query OK, 1 row affected (0.109 sec)
+
+MariaDB [system]> insert into orders values (2,1,'2023-11-14',18667);
+Query OK, 1 row affected (0.096 sec)
+
+MariaDB [system]> insert into orders values (3,8,'2023-11-21',19967);
+Query OK, 1 row affected (0.110 sec)
+
+MariaDB [system]> insert into orders values (4,5,'2023-10-11',199967);
+Query OK, 1 row affected (0.069 sec)
+
+MariaDB [system]> insert into orders values (5,6,'2023-10-19',19996);
+Query OK, 1 row affected (0.073 sec)
+
+MariaDB [system]> insert into orders values (6,6,'2023-09-19',88996);
+Query OK, 1 row affected (0.103 sec)
+
+MariaDB [system]> insert into orders values (7,8,'2023-09-27',22996);
+Query OK, 1 row affected (0.102 sec)
+
+MariaDB [system]> insert into orders values (8,2,'2023-07-27',822996);
+Query OK, 1 row affected (0.109 sec)
+
+MariaDB [system]> select * from orders;
++----------+---------+------------+--------------+
+| order_id | cust_id | order_date | total_amount |
++----------+---------+------------+--------------+
+|        1 |       3 | 2023-12-24 |        15667 |
+|        2 |       1 | 2023-11-14 |        18667 |
+|        3 |       8 | 2023-11-21 |        19967 |
+|        4 |       5 | 2023-10-11 |       199967 |
+|        5 |       6 | 2023-10-19 |        19996 |
+|        6 |       6 | 2023-09-19 |        88996 |
+|        7 |       8 | 2023-09-27 |        22996 |
+|        8 |       2 | 2023-07-27 |       822996 |
++----------+---------+------------+--------------+
+8 rows in set (0.001 sec)
+
+MariaDB [system]> insert into orderdetails values(1,2,1,266;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+MariaDB [system]> insert into orderdetails values(1,2,1,266);
+Query OK, 1 row affected (0.075 sec)
+
+MariaDB [system]> insert into orderdetails values(2,1,2,2066),(3,6,6,366),(4,5,3,344),(5,7,3,3222);
+Query OK, 4 rows affected (0.184 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> insert into orderdetails values(6,7,2,23066),(7,2,5,366),(8,3,3,3344);
+Query OK, 3 rows affected (0.030 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [system]> select * from orderdetails;
++-----------------+----------+------------+----------+
+| order_detail_id | order_id | product_id | qauntity |
++-----------------+----------+------------+----------+
+|               1 |        2 |          1 |      266 |
+|               2 |        1 |          2 |     2066 |
+|               3 |        6 |          6 |      366 |
+|               4 |        5 |          3 |      344 |
+|               5 |        7 |          3 |     3222 |
+|               6 |        7 |          2 |    23066 |
+|               7 |        2 |          5 |      366 |
+|               8 |        3 |          3 |     3344 |
++-----------------+----------+------------+----------+
+8 rows in set (0.001 sec)
+
+MariaDB [system]> insert into reviews values (1,2,3,'product was very good');
+Query OK, 1 row affected (0.105 sec)
+
+MariaDB [system]> insert into reviews values (2,2,2,'product was very good');
+Query OK, 1 row affected (0.074 sec)
+
+MariaDB [system]> insert into reviews values (3,4,6,'product was very poor');
+Query OK, 1 row affected (0.085 sec)
+
+MariaDB [system]> insert into reviews values (4,6,2,'product was damage');
+Query OK, 1 row affected (0.077 sec)
+
+MariaDB [system]> insert into reviews values (5,7,3,'service was very poor');
+Query OK, 1 row affected (0.086 sec)
+
+MariaDB [system]> insert into reviews values (6,5,6,'service was very poor');
+Query OK, 1 row affected (0.043 sec)
+
+MariaDB [system]> insert into reviews values (7,7,1,'good product');
+Query OK, 1 row affected (0.040 sec)
+
+MariaDB [system]> select * from reviews;
++-----------+---------+------------+-----------------------+
+| review_id | cust_id | product_id | reveiw_text           |
++-----------+---------+------------+-----------------------+
+|         1 |       2 |          3 | product was very good |
+|         2 |       2 |          2 | product was very good |
+|         3 |       4 |          6 | product was very poor |
+|         4 |       6 |          2 | product was damage    |
+|         5 |       7 |          3 | service was very poor |
+|         6 |       5 |          6 | service was very poor |
+|         7 |       7 |          1 | good product          |
++-----------+---------+------------+-----------------------+
+7 rows in set (0.001 sec)
+
+MariaDB [system]> select * from product where product_id in (select product_id from reviews);
++------------+--------------+-------+----------------+-------------+
+| product_id | product_name | price | stock_quantity | category_id |
++------------+--------------+-------+----------------+-------------+
+|          1 | shoes        |  1289 |            165 |           2 |
+|          2 | tshirt       |  1989 |            165 |           5 |
+|          3 | jeance       |  2755 |             18 |           3 |
+|          6 | shirt        |  2855 |             98 |           4 |
++------------+--------------+-------+----------------+-------------+
+4 rows in set (0.002 sec)
+
+MariaDB [system]> select * from orders where order_id in (select product_id from reviews);
++----------+---------+------------+--------------+
+| order_id | cust_id | order_date | total_amount |
++----------+---------+------------+--------------+
+|        1 |       3 | 2023-12-24 |        15667 |
+|        2 |       1 | 2023-11-14 |        18667 |
+|        3 |       8 | 2023-11-21 |        19967 |
+|        6 |       6 | 2023-09-19 |        88996 |
++----------+---------+------------+--------------+
+4 rows in set (0.002 sec)
+
+MariaDB [system]> select * from orders where order_id in (select product_id from orderdetails);
++----------+---------+------------+--------------+
+| order_id | cust_id | order_date | total_amount |
++----------+---------+------------+--------------+
+|        1 |       3 | 2023-12-24 |        15667 |
+|        2 |       1 | 2023-11-14 |        18667 |
+|        3 |       8 | 2023-11-21 |        19967 |
+|        5 |       6 | 2023-10-19 |        19996 |
+|        6 |       6 | 2023-09-19 |        88996 |
++----------+---------+------------+--------------+
+5 rows in set (0.001 sec)
+
+MariaDB [system]> select * from orders inner join reviews on orders.order_id = reviews.review_id;
++----------+---------+------------+--------------+-----------+---------+------------+-----------------------+
+| order_id | cust_id | order_date | total_amount | review_id | cust_id | product_id | reveiw_text           |
++----------+---------+------------+--------------+-----------+---------+------------+-----------------------+
+|        1 |       3 | 2023-12-24 |        15667 |         1 |       2 |          3 | product was very good |
+|        2 |       1 | 2023-11-14 |        18667 |         2 |       2 |          2 | product was very good |
+|        3 |       8 | 2023-11-21 |        19967 |         3 |       4 |          6 | product was very poor |
+|        4 |       5 | 2023-10-11 |       199967 |         4 |       6 |          2 | product was damage    |
+|        5 |       6 | 2023-10-19 |        19996 |         5 |       7 |          3 | service was very poor |
+|        6 |       6 | 2023-09-19 |        88996 |         6 |       5 |          6 | service was very poor |
+|        7 |       8 | 2023-09-27 |        22996 |         7 |       7 |          1 | good product          |
++----------+---------+------------+--------------+-----------+---------+------------+-----------------------+
+7 rows in set (0.002 sec)
+
+MariaDB [system]> select * from categories inner join reviews on categories.category_id = reviews.review_id;
++-------------+---------------+-----------+---------+------------+-----------------------+
+| category_id | category_name | review_id | cust_id | product_id | reveiw_text           |
++-------------+---------------+-----------+---------+------------+-----------------------+
+|           1 | casual        |         1 |       2 |          3 | product was very good |
+|           2 | formal        |         2 |       2 |          2 | product was very good |
+|           3 | wedding       |         3 |       4 |          6 | product was very poor |
+|           4 | tracksuit     |         4 |       6 |          2 | product was damage    |
+|           5 | kids          |         5 |       7 |          3 | service was very poor |
+|           6 | toys          |         6 |       5 |          6 | service was very poor |
+|           7 | grocery       |         7 |       7 |          1 | good product          |
++-------------+---------------+-----------+---------+------------+-----------------------+
+7 rows in set (0.069 sec)
+
+MariaDB [system]>

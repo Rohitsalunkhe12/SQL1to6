@@ -1,0 +1,259 @@
+
+Setting environment for using XAMPP for Windows.
+Aniket@DESKTOP-56FQSH7 c:\xampp
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use rohit
+Database changed
+MariaDB [rohit]> create table user (
+    -> uid int primary key,
+    -> u_name varchar(30) not null,
+    -> age int
+    -> );
+Query OK, 0 rows affected (0.483 sec)
+
+MariaDB [rohit]> insert into user values(1,'rohit'23),(2,'roy',34),(3,'ram',24),(4,'om',45);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '23),(2,'roy',34),(3,'ram',24),(4,'om',45)' at line 1
+MariaDB [rohit]> insert into user values(1,'rohit',23),(2,'roy',34),(3,'ram',24),(4,'om',45);
+Query OK, 4 rows affected (0.217 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [rohit]> select * from user;
++-----+--------+------+
+| uid | u_name | age  |
++-----+--------+------+
+|   1 | rohit  |   23 |
+|   2 | roy    |   34 |
+|   3 | ram    |   24 |
+|   4 | om     |   45 |
++-----+--------+------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> create table product(
+    -> pid int primary key,
+    -> p_name varchar(20) not null,
+    -> p_price float
+    -> );
+Query OK, 0 rows affected (0.295 sec)
+
+MariaDB [rohit]> insert into user values(1,'dog',2300),(2,'dooberman',98734),(3,'cat',2984),(4,'bulldog',9845);
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+MariaDB [rohit]> insert into product values(1,'dog',2300),(2,'dooberman',98734),(3,'cat',2984),(4,'bulldog',9845);
+Query OK, 4 rows affected (0.102 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [rohit]> select * from product;
++-----+-----------+---------+
+| pid | p_name    | p_price |
++-----+-----------+---------+
+|   1 | dog       |    2300 |
+|   2 | dooberman |   98734 |
+|   3 | cat       |    2984 |
+|   4 | bulldog   |    9845 |
++-----+-----------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> create table cart (
+    -> cid int primary key,
+    -> pid int,
+    -> uid int,
+    -> foreign key(pid) references product(pid),
+    -> foreign key(uid) references user(uid)
+    -> );
+Query OK, 0 rows affected (0.392 sec)
+
+MariaDB [rohit]> select * from product where pid in (select pid from cart);
+Empty set (0.004 sec)
+
+MariaDB [rohit]> insert into cart values(1,2,3),(2,1,4),(3,1,2),(4,4,3);
+Query OK, 4 rows affected (0.107 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [rohit]> select * from cart;
++-----+------+------+
+| cid | pid  | uid  |
++-----+------+------+
+|   1 |    2 |    3 |
+|   2 |    1 |    4 |
+|   3 |    1 |    2 |
+|   4 |    4 |    3 |
++-----+------+------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from product where pid in (select pid from cart);
++-----+-----------+---------+
+| pid | p_name    | p_price |
++-----+-----------+---------+
+|   1 | dog       |    2300 |
+|   2 | dooberman |   98734 |
+|   4 | bulldog   |    9845 |
++-----+-----------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from user where uid in (select uid from cart);
++-----+--------+------+
+| uid | u_name | age  |
++-----+--------+------+
+|   2 | roy    |   34 |
+|   3 | ram    |   24 |
+|   4 | om     |   45 |
++-----+--------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from product inner join cart on product.pid = cart.pid;
++-----+-----------+---------+-----+------+------+
+| pid | p_name    | p_price | cid | pid  | uid  |
++-----+-----------+---------+-----+------+------+
+|   2 | dooberman |   98734 |   1 |    2 |    3 |
+|   1 | dog       |    2300 |   2 |    1 |    4 |
+|   1 | dog       |    2300 |   3 |    1 |    2 |
+|   4 | bulldog   |    9845 |   4 |    4 |    3 |
++-----+-----------+---------+-----+------+------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> select product.p_name,product.p_price,user.u_name from product inner join cart on product.pid = cart.pid;
+ERROR 1054 (42S22): Unknown column 'user.u_name' in 'field list'
+MariaDB [rohit]> select product.p_name,product.p_price,user.u_name from user inner join cart on product.pid = cart.pid;
+ERROR 1054 (42S22): Unknown column 'product.p_name' in 'field list'
+MariaDB [rohit]> create table payment(pay_id int primary key,
+    -> uid int,
+    -> pid int,
+    -> foreign key(pid) references product(pid),
+    -> foreign key(uid) references user(uid)
+    -> );
+ERROR 1050 (42S01): Table 'payment' already exists
+MariaDB [rohit]> create table payment1(pay_id int primary key,
+    -> uid int,
+    -> pid int,
+    -> foreign key(pid) references product(pid),
+    -> foreign key(uid) references user(uid)
+    -> );
+Query OK, 0 rows affected (0.284 sec)
+
+MariaDB [rohit]> insert into payment1 values (1,2,3),(2,3,2),(3,4,4),(4,2,3);
+Query OK, 4 rows affected (0.248 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [rohit]> select * from payment1;
++--------+------+------+
+| pay_id | uid  | pid  |
++--------+------+------+
+|      1 |    2 |    3 |
+|      2 |    3 |    2 |
+|      3 |    4 |    4 |
+|      4 |    2 |    3 |
++--------+------+------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from product inner join cart on product.pid = cart.pid;
++-----+-----------+---------+-----+------+------+
+| pid | p_name    | p_price | cid | pid  | uid  |
++-----+-----------+---------+-----+------+------+
+|   2 | dooberman |   98734 |   1 |    2 |    3 |
+|   1 | dog       |    2300 |   2 |    1 |    4 |
+|   1 | dog       |    2300 |   3 |    1 |    2 |
+|   4 | bulldog   |    9845 |   4 |    4 |    3 |
++-----+-----------+---------+-----+------+------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from product where pid in (select pid from payment);
++-----+-----------+---------+
+| pid | p_name    | p_price |
++-----+-----------+---------+
+|   2 | dooberman |   98734 |
+|   3 | cat       |    2984 |
++-----+-----------+---------+
+2 rows in set (0.057 sec)
+
+MariaDB [rohit]> select * from product where uid in (select uid from payment);
+ERROR 1054 (42S22): Unknown column 'uid' in 'IN/ALL/ANY subquery'
+MariaDB [rohit]> select * from user where uid in (select uid from payment);
++-----+--------+------+
+| uid | u_name | age  |
++-----+--------+------+
+|   1 | rohit  |   23 |
+|   2 | roy    |   34 |
+|   3 | ram    |   24 |
+|   4 | om     |   45 |
++-----+--------+------+
+4 rows in set (0.002 sec)
+
+MariaDB [rohit]> create table finalorder(
+    -> oid int primary key,
+    -> pid int,
+    -> uid int,
+    -> pay_id int,
+    -> foreign key(pid) references product(pid),
+    -> foreign key(uid) references user(uid)
+    -> foreign key(pay_id) references payment1(pay_id)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'foreign key(pay_id) references payment1(pay_id)
+)' at line 8
+MariaDB [rohit]> foreign key(pay_id) references payment1(pay_id);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'foreign key(pay_id) references payment1(pay_id)' at line 1
+MariaDB [rohit]> create table finalorder(
+    -> oid int primary key,
+    -> pid int,
+    -> uid int,
+    -> pay_id int,
+    -> foreign key(pid) references product(pid),
+    -> foreign key(uid) references user(uid)
+    -> ,
+    ->
+    -> foreign key(pay_id) references payment1(pay_id)
+    -> );
+Query OK, 0 rows affected (0.276 sec)
+
+MariaDB [rohit]> insert into finalorder values(1,2,3,2),(2,3,2,1),(3,2,2,1),(4,2,1,1);
+Query OK, 4 rows affected (0.148 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [rohit]> select * from finalorder;
++-----+------+------+--------+
+| oid | pid  | uid  | pay_id |
++-----+------+------+--------+
+|   1 |    2 |    3 |      2 |
+|   2 |    3 |    2 |      1 |
+|   3 |    2 |    2 |      1 |
+|   4 |    2 |    1 |      1 |
++-----+------+------+--------+
+4 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from user where uid in (select uid from finalorder);
++-----+--------+------+
+| uid | u_name | age  |
++-----+--------+------+
+|   1 | rohit  |   23 |
+|   2 | roy    |   34 |
+|   3 | ram    |   24 |
++-----+--------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from product where uid in (select pid from finalorder);
+ERROR 1054 (42S22): Unknown column 'uid' in 'IN/ALL/ANY subquery'
+MariaDB [rohit]> select * from product where pid in (select pid from finalorder);
++-----+-----------+---------+
+| pid | p_name    | p_price |
++-----+-----------+---------+
+|   2 | dooberman |   98734 |
+|   3 | cat       |    2984 |
++-----+-----------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [rohit]> select * from payment1 where pay_id in (select pid from finalorder);
++--------+------+------+
+| pay_id | uid  | pid  |
++--------+------+------+
+|      2 |    3 |    2 |
+|      3 |    4 |    4 |
++--------+------+------+
+2 rows in set (0.001 sec)
+
+MariaDB [rohit]> ^S
