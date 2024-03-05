@@ -1,0 +1,37 @@
+
+Setting environment for using XAMPP for Windows.
+Aniket@DESKTOP-56FQSH7 c:\xampp
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use rohit
+Database changed
+MariaDB [rohit]> create table client (clientNo char(6) primary key,
+    -> name varchar(20) not null,
+    -> city varchar(50) not null,
+    -> pinNumber int ,
+    -> mobile_no char(1)
+    -> );
+Query OK, 0 rows affected (0.703 sec)
+
+MariaDB [rohit]> desc client;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| clientNo  | char(6)     | NO   | PRI | NULL    |       |
+| name      | varchar(20) | NO   |     | NULL    |       |
+| city      | varchar(50) | NO   |     | NULL    |       |
+| pinNumber | int(11)     | YES  |     | NULL    |       |
+| mobile_no | char(1)     | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.215 sec)
+
+MariaDB [rohit]>
+
+

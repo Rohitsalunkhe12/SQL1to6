@@ -1,0 +1,25 @@
+
+MariaDB [rohit]> create table grocery(item_no int,
+    -> item_name varchar(20),
+    -> mfd varchar(10),
+    -> expdate varchar(12),
+    -> address varchar(20),
+    -> city varchar(10)
+    -> );
+Query OK, 0 rows affected (0.269 sec)
+
+MariaDB [rohit]> desc grocery;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| item_no   | int(11)     | YES  |     | NULL    |       |
+| item_name | varchar(20) | YES  |     | NULL    |       |
+| mfd       | varchar(10) | YES  |     | NULL    |       |
+| expdate   | varchar(12) | YES  |     | NULL    |       |
+| address   | varchar(20) | YES  |     | NULL    |       |
+| city      | varchar(10) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+6 rows in set (0.043 sec)
+
+MariaDB [rohit]> drop table grocery;
+Query OK, 0 rows affected (0.888 sec)
