@@ -1,0 +1,312 @@
+
+Setting environment for using XAMPP for Windows.
+Aniket@DESKTOP-56FQSH7 c:\xampp
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| rohit              |
+| system             |
+| test               |
++--------------------+
+7 rows in set (0.193 sec)
+
+MariaDB [(none)]> create database project;
+Query OK, 1 row affected (0.271 sec)
+
+MariaDB [(none)]> use project
+Database changed
+MariaDB [project]> create table user(
+    -> userid int primary key,
+    -> username varchar(255),
+    -> email varchar(255),
+    -> password varchar(255)
+    -> );
+Query OK, 0 rows affected (0.300 sec)
+
+MariaDB [project]> insert into user values (1,'rohit','rohit172@gmail.com','rohit@123');
+Query OK, 1 row affected (1.485 sec)
+
+MariaDB [project]> insert into user values (2,'pratham','pratham72@gmail.com','pratham@123');
+Query OK, 1 row affected (0.122 sec)
+
+MariaDB [project]> insert into user values (3,'om','om272@gmail.com','ommi@123');
+Query OK, 1 row affected (0.139 sec)
+
+MariaDB [project]> insert into user values (4,'ashutosh','ashu272@gmail.com','ashu@1323');
+Query OK, 1 row affected (0.135 sec)
+
+MariaDB [project]> insert into user values (5,'chetan','chetan72@gmail.com','chetan@1323');
+Query OK, 1 row affected (0.093 sec)
+
+MariaDB [project]> insert into user values (6,'shwetali','shwetali72@gmail.com','shwetali@1323');
+Query OK, 1 row affected (0.091 sec)
+
+MariaDB [project]> insert into user values (7,'minal','minal772@gmail.com','minal@1323');
+Query OK, 1 row affected (0.128 sec)
+
+MariaDB [project]> insert into user values (8,'manoj','manoj772@gmail.com','manoj@1323');
+Query OK, 1 row affected (0.137 sec)
+
+MariaDB [project]> insert into user values (9,'vaishanavi','vaish2@gmail.com','vaish@1323');
+Query OK, 1 row affected (0.039 sec)
+
+MariaDB [project]> select * from user;
++--------+------------+----------------------+---------------+
+| userid | username   | email                | password      |
++--------+------------+----------------------+---------------+
+|      1 | rohit      | rohit172@gmail.com   | rohit@123     |
+|      2 | pratham    | pratham72@gmail.com  | pratham@123   |
+|      3 | om         | om272@gmail.com      | ommi@123      |
+|      4 | ashutosh   | ashu272@gmail.com    | ashu@1323     |
+|      5 | chetan     | chetan72@gmail.com   | chetan@1323   |
+|      6 | shwetali   | shwetali72@gmail.com | shwetali@1323 |
+|      7 | minal      | minal772@gmail.com   | minal@1323    |
+|      8 | manoj      | manoj772@gmail.com   | manoj@1323    |
+|      9 | vaishanavi | vaish2@gmail.com     | vaish@1323    |
++--------+------------+----------------------+---------------+
+9 rows in set (0.001 sec)
+
+MariaDB [project]> create table category(
+    -> cat_id int primary key,
+    -> name varchar(255)
+    -> );
+Query OK, 0 rows affected (0.254 sec)
+
+MariaDB [project]> insert into category values (1,'Electronics'),(2,'Clothing'),(3,'Books'),(4,'Home and Kitchen'),(5,'Sports'),(6,'Beuty and personal Care'),(7,'Toys and Games');
+Query OK, 7 rows affected (0.101 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+MariaDB [project]> insert into category values (8,'health and wellness'),(9,'Jewelry');
+Query OK, 2 rows affected (0.039 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [project]> select * from category;
++--------+-------------------------+
+| cat_id | name                    |
++--------+-------------------------+
+|      1 | Electronics             |
+|      2 | Clothing                |
+|      3 | Books                   |
+|      4 | Home and Kitchen        |
+|      5 | Sports                  |
+|      6 | Beuty and personal Care |
+|      7 | Toys and Games          |
+|      8 | health and wellness     |
+|      9 | Jewelry                 |
++--------+-------------------------+
+9 rows in set (0.001 sec)
+
+MariaDB [project]> create table product(
+    -> productid int primary key,
+    -> name varchar(255),
+    -> price float,
+    -> cat_id int,
+    -> foreign key(cat_id) references category(cat_id)
+    -> );
+Query OK, 0 rows affected (0.330 sec)
+
+MariaDB [project]> insert into product values(1,'Smartphone',39999,1),(2,'jeans',799,2);
+Query OK, 2 rows affected (0.092 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [project]> insert into product values(3,'The great getsby-book',999,3),(4,'coffee maker',1199,4),(5,'Running shoes',1499,5),(6,'shampoo',499,6);
+Query OK, 4 rows affected (0.095 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [project]> insert into product values(7,'Board Game',2599,7),(8,'Fitness Tracker',1990,8),(9,'Silver Necklece',65000,9);
+Query OK, 3 rows affected (0.140 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [project]> select * from product;
++-----------+-----------------------+-------+--------+
+| productid | name                  | price | cat_id |
++-----------+-----------------------+-------+--------+
+|         1 | Smartphone            | 39999 |      1 |
+|         2 | jeans                 |   799 |      2 |
+|         3 | The great getsby-book |   999 |      3 |
+|         4 | coffee maker          |  1199 |      4 |
+|         5 | Running shoes         |  1499 |      5 |
+|         6 | shampoo               |   499 |      6 |
+|         7 | Board Game            |  2599 |      7 |
+|         8 | Fitness Tracker       |  1990 |      8 |
+|         9 | Silver Necklece       | 65000 |      9 |
++-----------+-----------------------+-------+--------+
+9 rows in set (0.001 sec)
+
+MariaDB [project]> create table order(
+    -> orderid int primary key,
+    -> userid int,
+    -> date DATE,
+    -> total_amount float,
+    -> foreign key(userid) references user(userid)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order(
+orderid int primary key,
+userid int,
+date DATE,
+total_amount float,
+fo...' at line 1
+MariaDB [project]> create table order (
+    -> order_id int primary key,
+    -> userid int,
+    -> date DATE not null,
+    -> totalamount float noy null,
+    -> foreign key(userid) references user(userid)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order (
+order_id int primary key,
+userid int,
+date DATE not null,
+totalamount...' at line 1
+MariaDB [project]> create table order (
+    -> orderid int primary key,
+    -> userid int,
+    -> date date ,
+    -> totalamount float ,
+    -> foreign key(userid) references user(userid)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order (
+orderid int primary key,
+userid int,
+date date ,
+totalamount float ,
+...' at line 1
+MariaDB [project]> create table order1(
+    -> order_id int primary key,
+    -> userid int,
+    -> date date,
+    -> total_amount float,
+    -> foreign key(userid) references user(userid)
+    -> );
+Query OK, 0 rows affected (0.480 sec)
+
+MariaDB [project]> insert into order1 values (1,1,'2024-03-06',38999);
+Query OK, 1 row affected (0.106 sec)
+
+MariaDB [project]> insert into order1 values (2,2,'2024-03-07',799);
+Query OK, 1 row affected (0.166 sec)
+
+MariaDB [project]> insert into order1 values (3,3,'2024-03-08',999);
+Query OK, 1 row affected (0.096 sec)
+
+MariaDB [project]> insert into order1 values (4,4,'2024-03-09',1999);
+Query OK, 1 row affected (0.110 sec)
+
+MariaDB [project]> insert into order1 values (5,5,'2024-03-10',1499);
+Query OK, 1 row affected (0.095 sec)
+
+MariaDB [project]> insert into order1 values (6,1,'2024-03-11',499);
+Query OK, 1 row affected (0.116 sec)
+
+MariaDB [project]> insert into order1 values (7,2,'2024-03-12',2599);
+Query OK, 1 row affected (0.103 sec)
+
+MariaDB [project]> insert into order1 values (8,3,'2024-03-13',1999);
+Query OK, 1 row affected (0.088 sec)
+
+MariaDB [project]> insert into order1 values (9,5,'2024-03-13',56999);
+Query OK, 1 row affected (0.070 sec)
+
+MariaDB [project]> sekect * from order1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'sekect * from order1' at line 1
+MariaDB [project]> select * from order1;
++----------+--------+------------+--------------+
+| order_id | userid | date       | total_amount |
++----------+--------+------------+--------------+
+|        1 |      1 | 2024-03-06 |        38999 |
+|        2 |      2 | 2024-03-07 |          799 |
+|        3 |      3 | 2024-03-08 |          999 |
+|        4 |      4 | 2024-03-09 |         1999 |
+|        5 |      5 | 2024-03-10 |         1499 |
+|        6 |      1 | 2024-03-11 |          499 |
+|        7 |      2 | 2024-03-12 |         2599 |
+|        8 |      3 | 2024-03-13 |         1999 |
+|        9 |      5 | 2024-03-13 |        56999 |
++----------+--------+------------+--------------+
+9 rows in set (0.001 sec)
+
+MariaDB [project]> create table orderdetails (
+    -> orderdetail_id int primary key,
+    -> order_id int,
+    -> productid int,
+    -> Quantity int not null,
+    -> subtotal float not null,
+    -> foreign key(order_id) references order1(order_id),
+    -> foreign key(productid) references product(productid)
+    -> );
+Query OK, 0 rows affected (0.309 sec)
+
+MariaDB [project]> insert into orderdetails values(1,1,1,2,70677);
+Query OK, 1 row affected (0.109 sec)
+
+MariaDB [project]> insert into orderdetails values(2,1,2,3,2177);
+Query OK, 1 row affected (0.105 sec)
+
+MariaDB [project]> insert into orderdetails values(3,2,3,1,977);
+Query OK, 1 row affected (0.092 sec)
+
+MariaDB [project]> insert into orderdetails values(4,2,4,1,1999);
+Query OK, 1 row affected (0.083 sec)
+
+MariaDB [project]> insert into orderdetails values(5,3,5,2,3999);
+Query OK, 1 row affected (0.077 sec)
+
+MariaDB [project]> insert into orderdetails values(6,4,6,4,2999);
+Query OK, 1 row affected (0.088 sec)
+
+MariaDB [project]> insert into orderdetails values(7,5,7,1,2599);
+Query OK, 1 row affected (0.047 sec)
+
+MariaDB [project]> insert into orderdetails values(8,7,9,2,2999);
+Query OK, 1 row affected (0.079 sec)
+
+MariaDB [project]> insert into orderdetails values(9,8,9,3,28999);
+Query OK, 1 row affected (0.074 sec)
+
+MariaDB [project]> select * from orderdetails;
++----------------+----------+-----------+----------+----------+
+| orderdetail_id | order_id | productid | Quantity | subtotal |
++----------------+----------+-----------+----------+----------+
+|              1 |        1 |         1 |        2 |    70677 |
+|              2 |        1 |         2 |        3 |     2177 |
+|              3 |        2 |         3 |        1 |      977 |
+|              4 |        2 |         4 |        1 |     1999 |
+|              5 |        3 |         5 |        2 |     3999 |
+|              6 |        4 |         6 |        4 |     2999 |
+|              7 |        5 |         7 |        1 |     2599 |
+|              8 |        7 |         9 |        2 |     2999 |
+|              9 |        8 |         9 |        3 |    28999 |
++----------------+----------+-----------+----------+----------+
+9 rows in set (0.001 sec)
+
+MariaDB [project]> select user.username,order1.order_id,order1.date,order1.total_amount from user inner join order1 on user.userid = order1.userid;
++----------+----------+------------+--------------+
+| username | order_id | date       | total_amount |
++----------+----------+------------+--------------+
+| rohit    |        1 | 2024-03-06 |        38999 |
+| pratham  |        2 | 2024-03-07 |          799 |
+| om       |        3 | 2024-03-08 |          999 |
+| ashutosh |        4 | 2024-03-09 |         1999 |
+| chetan   |        5 | 2024-03-10 |         1499 |
+| rohit    |        6 | 2024-03-11 |          499 |
+| pratham  |        7 | 2024-03-12 |         2599 |
+| om       |        8 | 2024-03-13 |         1999 |
+| chetan   |        9 | 2024-03-13 |        56999 |
++----------+----------+------------+--------------+
+9 rows in set (0.014 sec)
+
+MariaDB [project]>
